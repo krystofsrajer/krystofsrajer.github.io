@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zvířata Slovenska</title>
+<meta name="description" content="Přehled zvířat, která žijí na Slovensku: od medvěda v Karpatech po kamzíka v Tatrách.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --spruce:#16302b; --moss:#5b7a3a; --bone:#f3efe6; --stone:#d9d3c4; --ink:#1d2421; --rowan:#c8452d;
+  --head:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --body:"Source Serif 4",Georgia,serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bone);color:var(--ink);font-family:var(--body);font-size:1.1rem;line-height:1.65}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--rowan);outline-offset:3px}
+
+header{background:var(--spruce);color:var(--bone);padding:clamp(3rem,10vw,7rem) 1.5rem 0;position:relative;overflow:hidden}
+.wrap{max-width:62rem;margin:0 auto}
+h1{font-family:var(--head);font-weight:800;font-size:clamp(3rem,11vw,7.5rem);line-height:.95;margin:0;letter-spacing:-.03em}
+header p{max-width:34rem;font-size:1.25rem;margin:1.5rem 0 0;color:#cfd8c9}
+/* siluet hor */
+.ridge{display:block;width:100%;height:auto;margin-top:2.5rem}
+
+main{padding:3rem 1.5rem 4rem}
+.filters{display:flex;flex-wrap:wrap;gap:.6rem;margin:0 0 2.5rem;padding:0;list-style:none}
+.filters button{font:600 1rem var(--head);padding:.55rem 1.1rem;border:2px solid var(--spruce);background:transparent;color:var(--spruce);border-radius:2rem;cursor:pointer;transition:background .15s,color .15s}
+.filters button:hover{background:var(--stone)}
+.filters button[aria-pressed="true"]{background:var(--spruce);color:var(--bone)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(17rem,1fr));gap:1.5rem}
+.card{background:#fff;border-top:6px solid var(--moss);padding:1.4rem 1.4rem 1.6rem}
+.card[data-h="vysoke-hory"]{border-top-color:#4d6f8f}
+.card[data-h="vody"]{border-top-color:#2f8a8a}
+.card[data-h="horske"]{border-top-color:#4d6f8f}
+.card[data-h="reky"]{border-top-color:#2f8a8a}
+.card[data-h="rybniky"]{border-top-color:#5b7a3a}
+.card[data-h="vzacne"]{border-top-color:#c8452d}
+.card[hidden]{display:none}
+h2.sec{font-family:var(--head);font-weight:800;font-size:clamp(2.2rem,6vw,3.6rem);line-height:1;margin:0 0 .6rem;letter-spacing:-.02em;color:var(--spruce)}
+.lead{max-width:38rem;margin:0 0 1.6rem}
+.card h2{font-family:var(--head);font-size:1.6rem;line-height:1.1;margin:0}
+.latin{font-style:italic;color:#5c645f;font-size:.95rem;margin:.2rem 0 .9rem}
+.card p{margin:.4rem 0}
+.meta{font-size:.95rem;color:#3c4540;border-top:1px solid var(--stone);margin-top:1rem;padding-top:.7rem}
+.meta b{font-family:var(--head);font-weight:700}
+
+.pic{display:block;width:calc(100% + 2.8rem);height:auto;margin:-1.4rem -1.4rem 1rem}
+.status{display:inline-block;font:700 .8rem var(--head);padding:.15rem .6rem;border-radius:1rem;background:var(--stone);margin-bottom:.6rem}
+.status.chraneny{background:#f0d8d1;color:#7a2616}
+
+footer{background:var(--spruce);color:#cfd8c9;padding:2rem 1.5rem;font-size:.95rem}
+footer a{color:var(--bone)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.filters button{transition:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Zvířata<br>Slovenska</h1>
+    <p>Karpatské lesy, vysoké štíty Tater a řeky Pohroní. Slovensko patří mezi země s největší divokou zvěří ve střední Evropě.</p>
+  </div>
+  <svg class="ridge" viewBox="0 0 1200 140" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 140V95l90-40 70 30 110-75 80 60 90-35 120 70 100-55 110 60 90-45 100 50 120-60 120 70V140z" fill="#f3efe6"/>
+  </svg>
+</header>
+
+<main>
+  <div class="wrap">
+    <ul class="filters" id="af" aria-label="Filtr podle prostředí">
+      <li><button type="button" data-filter="vse" aria-pressed="true">Všechna</button></li>
+      <li><button type="button" data-filter="les" aria-pressed="false">Lesy</button></li>
+      <li><button type="button" data-filter="vysoke-hory" aria-pressed="false">Vysoké hory</button></li>
+      <li><button type="button" data-filter="vody" aria-pressed="false">Vody</button></li>
+    </ul>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="wrap" id="ryby" style="margin-top:5rem">
+    <h2 class="sec">Ryby Slovenska</h2>
+    <p class="lead">39 druhů z potoků, řek, rybníků i Dunaje. Slovensko jich má celkem asi sedmdesát, tady jsou ty nejznámější a nejzajímavější.</p>
+    <ul class="filters" id="ff" aria-label="Filtr ryb podle vod">
+      <li><button type="button" data-filter="vse" aria-pressed="true">Všechny</button></li>
+      <li><button type="button" data-filter="horske" aria-pressed="false">Horské potoky</button></li>
+      <li><button type="button" data-filter="reky" aria-pressed="false">Řeky</button></li>
+      <li><button type="button" data-filter="rybniky" aria-pressed="false">Rybníky</button></li>
+      <li><button type="button" data-filter="vzacne" aria-pressed="false">Vzácné</button></li>
+    </ul>
+    <div class="grid" id="fgrid"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    Informace jsou orientační. Aktuální stavy populací najdeš u
+    <a href="https://www.sopsr.sk/" target="_blank" rel="noopener">Štátnej ochrany prírody SR</a>.
+  </div>
+</footer>
+
+<script>
+const animals = [
+  {n:"Medvěd hnědý", l:"Ursus arctos", h:"les", s:"Chráněný", t:"Největší slovenská šelma. Žije v Tatrách, Fatře, na Poloninách i v dalších karpatských pohořích. Slovensko má jednu z největších populací v Evropě mimo Ruska.", m:"Zhruba 100–350 kg", x:"Hory a smíšené lesy"},
+  {n:"Rys ostrovid", l:"Lynx lynx", h:"les", s:"Chráněný", t:"Plachá kočkovitá šelma s kratičkým ocasem a štětičkami na uších. Loví hlavně srnce a je aktivní za soumraku a v noci.", m:"Zhruba 15–30 kg", x:"Velké souvislé lesy"},
+  {n:"Vlk obecný", l:"Canis lupus", h:"les", s:"Chráněný", t:"Žije ve smečkách, které mají přesně vymezená teritoria. Na Slovensku obývá hlavně horské oblasti na severu a ve středu země.", m:"Zhruba 25–50 kg", x:"Lesnaté pohoří"},
+  {n:"Jelen lesní", l:"Cervus elaphus", h:"les", s:"Běžný", t:"Největší spárkatá zvěř Slovenska. V období říje se na podzim ozývá hlasité troubení samců, které je slyšet široko daleko.", m:"Zhruba 100–250 kg", x:"Lesy a louky"},
+  {n:"Zubr evropský", l:"Bison bonasus", h:"les", s:"Chráněný", t:"Nejtěžší evropský suchozemský savec. Na východním Slovensku v oblasti Poloniny byl znovu vysazen a dnes tam žije malé stádo.", m:"Až 900 kg", x:"Bukové pralesy"},
+  {n:"Kamzík horský tatranský", l:"Rupicapra rupicapra tatrica", h:"vysoke-hory", s:"Chráněný", t:"Endemický poddruh kamzíka, který žije jen v Tatrách. Po skalách a suti se pohybuje s ohromnou jistotou.", m:"Zhruba 25–40 kg", x:"Skály nad hranicí lesa"},
+  {n:"Svišť horský", l:"Marmota marmota", h:"vysoke-hory", s:"Chráněný", t:"Velký hlodavec, který hlídkuje u svých nor a při nebezpečí pronikavě pískne. Zimu přespí v hibernaci v podzemí.", m:"Zhruba 3–6 kg", x:"Alpínské louky"},
+  {n:"Orel skalní", l:"Aquila chrysaetos", h:"vysoke-hory", s:"Chráněný", t:"Mohutný dravec s rozpětím křídel přes dva metry. Hnízdí na skalách a loví zajíce, svišťe i menší savce a ptáky.", m:"Rozpětí 190–230 cm", x:"Skalní stěny a hřebeny"},
+  {n:"Vydra říční", l:"Lutra lutra", h:"vody", s:"Chráněná", t:"Mrštný lovec ryb, který potřebuje čisté vody s bohatými břehy. Na Slovensku ji najdeš u řek i rybníků.", m:"Zhruba 6–12 kg", x:"Řeky a potoky"},
+  {n:"Bobr evropský", l:"Castor fiber", h:"vody", s:"Chráněný", t:"Staví hráze a hrady z větví a mění tak krajinu kolem sebe. Na Slovensku žije hlavně u větších nížinných řek.", m:"Zhruba 15–30 kg", x:"Lužní lesy a řeky"}
+];
+
+const bg={"les":"#dfe8d0","vysoke-hory":"#d8e3ec","vody":"#cfe6e4"};
+const gr='<rect y="100" width="200" height="20" fill="#000" opacity=".09"/>';
+const leg=(c,w,...xs)=>xs.map(x=>`<path d="M${x} 85V105" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`).join("");
+const art={
+"Medvěd hnědý":gr+leg("#4e3422",13,78,92,125,139)+'<ellipse cx="105" cy="70" rx="50" ry="28" fill="#6b4a32"/><circle cx="58" cy="62" r="17" fill="#6b4a32"/><circle cx="62" cy="47" r="5.5" fill="#4e3422"/><ellipse cx="44" cy="68" rx="9" ry="7" fill="#8a6445"/><circle cx="37" cy="66" r="2.6" fill="#1d1510"/><circle cx="54" cy="58" r="2" fill="#1d1510"/>',
+"Rys ostrovid":gr+leg("#a98550",6,78,90,120,134)+'<path d="M146 66l12 4-3 8-10-4z" fill="#3b2d1d"/><ellipse cx="105" cy="72" rx="42" ry="20" fill="#c9a46a"/><circle cx="60" cy="58" r="15" fill="#c9a46a"/><path d="M50 48L53 26 62 45zM66 45L74 26 74 50z" fill="#c9a46a"/><path d="M53 26l-1 8M74 26l-1 8" stroke="#2c2117" stroke-width="3"/><circle cx="55" cy="56" r="2" fill="#2c2117"/><circle cx="66" cy="56" r="2" fill="#2c2117"/><path d="M58 64h6" stroke="#8b5a4a" stroke-width="2"/><g fill="#7a5a32"><circle cx="95" cy="66" r="3"/><circle cx="112" cy="72" r="3"/><circle cx="125" cy="64" r="3"/></g>',
+"Vlk obecný":gr+leg("#5d6267",7,80,92,122,136)+'<path d="M147 62Q172 56 170 84Q158 72 145 76z" fill="#7d8287"/><ellipse cx="105" cy="70" rx="46" ry="20" fill="#7d8287"/><path d="M66 50L40 68 60 74 78 66zM62 50L60 34 70 46zM72 48L76 33 80 52z" fill="#7d8287"/><circle cx="62" cy="58" r="2" fill="#f2d675"/><circle cx="40" cy="68" r="3" fill="#1b1d1f"/>',
+"Jelen lesní":gr+leg("#6f4a28",5,78,88,122,134)+'<ellipse cx="105" cy="72" rx="40" ry="19" fill="#9a6a3f"/><path d="M72 66L55 38 72 36 86 62z" fill="#9a6a3f"/><ellipse cx="55" cy="36" rx="13" ry="9" fill="#9a6a3f"/><path d="M58 28L56 6M56 18L44 10M57 10L66 3M64 30L74 12M70 20L82 18" stroke="#4a3524" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="52" cy="34" r="2" fill="#1d1510"/><circle cx="43" cy="38" r="3" fill="#1d1510"/>',
+"Zubr evropský":gr+leg("#2e231b",13,78,92,128,142)+'<ellipse cx="108" cy="68" rx="50" ry="27" fill="#4a3a2f"/><circle cx="76" cy="52" r="23" fill="#3a2d24"/><ellipse cx="46" cy="74" rx="14" ry="17" fill="#5a4638"/><path d="M38 58Q32 46 40 44M54 58Q60 46 52 44" stroke="#e9e0cc" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="42" cy="70" r="2" fill="#fff"/><circle cx="43" cy="86" r="2.4" fill="#1d1510"/>',
+"Kamzík horský tatranský":'<path d="M0 120V92L40 70 70 90 110 64 150 88 200 60V120z" fill="#8f9aa3"/><path d="M110 64l-14 22 24 4z" fill="#aab4bb"/>'+leg("#5e4529",5,84,94,112,122)+'<ellipse cx="103" cy="68" rx="30" ry="15" fill="#8c6a45"/><path d="M82 64L68 52 78 46 92 56z" fill="#8c6a45"/><circle cx="66" cy="48" r="9" fill="#a88455"/><path d="M60 46h14" stroke="#2f2216" stroke-width="3"/><path d="M64 40Q61 26 73 31M70 40Q70 28 80 33" stroke="#2f2216" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
+"Svišť horský":gr+'<path d="M20 100q4-14 8 0M30 100q4-18 8 0M164 100q4-14 8 0" stroke="#5b7a3a" stroke-width="3" fill="none"/><ellipse cx="100" cy="76" rx="38" ry="24" fill="#a08560"/><circle cx="68" cy="64" r="15" fill="#b39970"/><circle cx="66" cy="52" r="4.5" fill="#7d6644"/><circle cx="64" cy="60" r="2" fill="#1d1510"/><circle cx="55" cy="66" r="3" fill="#2c2117"/><rect x="57" y="70" width="3" height="5" fill="#fff"/><rect x="61" y="70" width="3" height="5" fill="#fff"/><g fill="#7d6644"><ellipse cx="80" cy="96" rx="9" ry="5"/><ellipse cx="122" cy="96" rx="9" ry="5"/></g>',
+"Orel skalní":'<circle cx="160" cy="28" r="12" fill="#f6e6a6"/><path d="M96 52Q50 14 6 46Q18 40 28 46Q40 40 52 48Q70 44 92 70zM104 52Q150 14 194 46Q182 40 172 46Q160 40 148 48Q130 44 108 70z" fill="#5a3e28"/><ellipse cx="100" cy="62" rx="10" ry="22" fill="#6b4a32"/><circle cx="100" cy="36" r="8" fill="#8a6445"/><path d="M95 36l-9 4 9 3z" fill="#e8b33a"/><path d="M95 84l5 14 5-14z" fill="#4a321f"/><circle cx="98" cy="34" r="1.6" fill="#111"/>',
+"Vydra říční":'<path d="M146 76Q176 70 188 86Q160 84 140 88z" fill="#6b5038"/><ellipse cx="100" cy="76" rx="46" ry="14" fill="#6b5038"/><circle cx="54" cy="68" r="12" fill="#7a5d42"/><circle cx="46" cy="64" r="2" fill="#1d1510"/><circle cx="43" cy="72" r="3" fill="#1d1510"/><path d="M42 74h-8M42 77h-8" stroke="#e9e0cc" stroke-width="1"/><path d="M0 84Q25 76 50 84T100 84T150 84T200 84V120H0z" fill="#3b8f9a" opacity=".85"/><path d="M0 98Q25 90 50 98T100 98T150 98T200 98V120H0z" fill="#2f7580" opacity=".8"/>',
+"Bobr evropský":gr+'<rect x="108" y="92" width="60" height="7" rx="3.5" fill="#b08a58"/><ellipse cx="146" cy="94" rx="20" ry="7" fill="#3d2c20"/><ellipse cx="95" cy="75" rx="36" ry="24" fill="#7a5232"/><circle cx="62" cy="66" r="14" fill="#8a6040"/><circle cx="68" cy="53" r="4" fill="#5e3f26"/><circle cx="60" cy="63" r="2" fill="#1d1510"/><circle cx="50" cy="69" r="3" fill="#1d1510"/><rect x="52" y="73" width="4" height="7" rx="1" fill="#e8913a"/>'
+};
+
+const grid=document.getElementById("grid");
+grid.innerHTML=animals.map(a=>`
+  <article class="card" data-h="${a.h}">
+    <svg class="pic" viewBox="0 0 200 120" role="img" aria-label="Kresba: ${a.n}" style="background:${bg[a.h]}">${art[a.n]}</svg>
+    <span class="status ${a.s.startsWith("Chr")?"chraneny":""}">${a.s}</span>
+    <h2>${a.n}</h2>
+    <p class="latin">${a.l}</p>
+    <p>${a.t}</p>
+    <div class="meta"><b>Velikost:</b> ${a.m}<br><b>Prostředí:</b> ${a.x}</div>
+  </article>`).join("");
+
+const F=[
+["Pstruh potoční","Salmo trutta fario","horske","std","#8c7b4c","#e8dfb4","rspots","","25–50 cm","Dravec čistých studených potoků, poznáš ho podle tmavých a červených teček."],
+["Pstruh duhový","Oncorhynchus mykiss","horske","std","#8fa3a6","#e9efe8","line","","30–60 cm","Nepůvodní druh ze Severní Ameriky, vysazovaný do rybářských revírů. Po boku má duhový pruh."],
+["Siven americký","Salvelinus fontinalis","horske","std","#5f6f4f","#e8a36a","rspots","","25–40 cm","Nepůvodní lososovitá ryba se světlými skvrnami a bílým lemem na ploutvích."],
+["Lipan podhorní","Thymallus thymallus","horske","std","#7f8a8c","#d9ddd6","spots","#7a5e8a","30–50 cm","Má velkou vlajkovitou hřbetní ploutev a potřebuje čistou, okysličenou vodu."],
+["Vranka obecná","Cottus gobio","horske","long","#7a6a50","#cfc29c","stripes","","8–12 cm","Malá ryba s velkou hlavou, která se skrývá pod kameny na dně potoků."],
+["Střevle potoční","Phoxinus phoxinus","horske","long","#8c9a6a","#e9e4c8","line","","6–10 cm","Drobná hejnová ryba rychlých potoků."],
+["Hrouzek obecný","Gobio gobio","horske","long","#a09a78","#ece6cf","spots","","10–15 cm","Dnová ryba s malými vousky u úst, hledá potravu v písku a štěrku."],
+["Slíž obecný","Barbatula barbatula","horske","long","#9a8a5e","#e6dcb5","stripes","","8–12 cm","Štíhlá dnová ryba s vousky. Přes den se ukrývá a loví v noci."],
+["Jelec tloušť","Squalius cephalus","reky","std","#8b8f68","#e8e4cf","none","#c9805a","30–60 cm","Hojná ryba našich řek, všežravec s širokou hlavou a velkými šupinami."],
+["Parma obecná","Barbus barbus","reky","std","#8a8a58","#ebe2bc","barbels","","40–70 cm","Má čtyři vousky u úst a žije v rychlejších řekách."],
+["Bolen dravý","Aspius aspius","reky","std","#7b8a96","#e0e5e6","none","#c9805a","60–100 cm","Jediný dravý kaprovitý, loví drobné ryby při hladině."],
+["Ostroretka stěhovavá","Chondrostoma nasus","reky","std","#8a919a","#e4e6e0","none","#c9805a","30–45 cm","Spodní ústa s rohovitým okrajem, kterým seškrabává řasy z kamenů."],
+["Podoustev říční","Vimba vimba","reky","std","#7a8a88","#e8e0b8","none","#a98a5a","25–35 cm","Štíhlá ryba větších řek s výrazným nosem."],
+["Jelec jesen","Leuciscus idus","reky","std","#8f9496","#e6e6dc","none","#d88a52","30–50 cm","Podobá se jelci tlouštovi, ale má červenavé ploutve."],
+["Jelec proudník","Leuciscus leuciscus","reky","std","#9aa09a","#eceee6","none","","15–25 cm","Štíhlý jelec rychle tekoucích vod, žije v hejnech."],
+["Ouklej obecná","Alburnus alburnus","reky","long","#9aa8aa","#f0f2ee","line","","10–15 cm","Stříbrná hejnová ryba, kterou často uvidíš těsně pod hladinou."],
+["Plotice obecná","Rutilus rutilus","reky","std","#8a97a0","#e8ece8","none","#d0584a","20–35 cm","Velmi hojná ryba s červenými ploutvemi a červenooranžovým okem."],
+["Cejn velký","Abramis brama","reky","tall","#a59a78","#e5dcb8","none","#7a7058","30–60 cm","Vysoké, bokem zploštělé tělo. Při dně hledá červy a larvy."],
+["Okoun říční","Perca fluviatilis","reky","std","#7d8a4a","#e7e2a8","stripes","#d0584a","20–35 cm","Dravec s tmavými pruhy, červenými ploutvemi a ostrými trny na hřbetě."],
+["Štika obecná","Esox lucius","reky","long","#6f8a4f","#d9ddb0","spots","","50–100 cm","Číhající predátor s dlouhou hlavou a množstvím zubů. Loví z úkrytu v rákosí."],
+["Candát obecný","Sander lucioperca","reky","std","#7f8f8a","#e2e6dc","stripes","","50–80 cm","Dravec větších řek a nádrží, vidí dobře i v kalné vodě."],
+["Sumec velký","Silurus glanis","reky","long","#4b4a3a","#cfcab2","barbels","","100–250 cm","Největší sladkovodní ryba střední Evropy. Loví hlavně v noci, nejčastěji v Dunaji."],
+["Mník jednovousý","Lota lota","reky","long","#7a6a3e","#d7cf9e","spots","","30–60 cm","Jediný sladkovodní zástupce treskovitých, má vousek na bradě."],
+["Ježdík obecný","Gymnocephalus cernua","reky","std","#8a8a4a","#e2dca0","spots","","10–15 cm","Malý příbuzný okouna s ostnatou hřbetní ploutví."],
+["Kapr obecný","Cyprinus carpio","rybniky","tall","#a08a4a","#e6d79a","none","#8a7440","40–80 cm","Nejznámější rybniční ryba s vousky a velkými šupinami."],
+["Karas stříbřitý","Carassius gibelio","rybniky","tall","#aeb2a0","#eceee0","none","","15–30 cm","Odolná ryba, která snese i vodu s malým množstvím kyslíku."],
+["Karas obecný","Carassius carassius","rybniky","tall","#a98a3e","#e6cf8a","none","#c9803a","15–30 cm","Zlatohnědý karas zarostlých rybníků a tůní, ubývá."],
+["Lín obecný","Tinca tinca","rybniky","std","#5f6f3e","#c8c47a","none","#4e5a34","25–40 cm","Zelenohnědá ryba s drobnými šupinami a krátkými vousky."],
+["Perlín ostrobřichý","Scardinius erythrophthalmus","rybniky","std","#a38a50","#e8d8a0","none","#d0403a","20–30 cm","Zlatavé tělo a jasně červené ploutve, drží se v porostech při hladině."],
+["Slunka obecná","Leucaspius delineatus","rybniky","long","#a8b4b0","#f0f2ee","line","","6–9 cm","Drobná stříbrná rybka, hejna plavou těsně pod hladinou."],
+["Hořavka duhová","Rhodeus amarus","rybniky","std","#a8a8a0","#e8e0d0","line","","5–8 cm","Samička klade jikry do žaber škeblí a velevrubů."],
+["Amur bílý","Ctenopharyngodon idella","rybniky","std","#8f9a70","#e8e4c0","none","","60–100 cm","Nepůvodní býložravec z Asie, který se živí vodními rostlinami."],
+["Tolstolobik bílý","Hypophthalmichthys molitrix","rybniky","tall","#b8bcb8","#eef0ec","none","","50–100 cm","Nepůvodní ryba z Asie, která z vody filtruje plankton."],
+["Střevlička východní","Pseudorasbora parva","rybniky","long","#9aa09a","#e8eae0","line","","6–9 cm","Invazní druh z Asie, který škodí původním rybám."],
+["Hlavatka podunajská","Hucho hucho","vzacne","std","#8a6a55","#e0cbb4","spots","#c9704a","70–120 cm","Největší lososovitá ryba Evropy, chráněná a vzácná."],
+["Jeseter malý","Acipenser ruthenus","vzacne","long","#6b6552","#d8d0b0","none","","40–80 cm","Chráněná ryba Dunaje s vousky a kostěnými štítky na hřbetě i bocích."],
+["Blatňák tmavý","Umbra krameri","vzacne","long","#4e4a3a","#a09a72","none","","8–12 cm","Malá vzácná ryba zarostlých tůní s bahnitým dnem."],
+["Piskoř pruhovaný","Misgurnus fossilis","vzacne","long","#8a7a50","#e0d49a","line","","15–25 cm","Hadovitá ryba bahnitých vod. Při nedostatku kyslíku polyká vzduch."],
+["Mihule ukrajinská","Eudontomyzon mariae","vzacne","long","#6f6a52","#cfc9a6","none","","15–20 cm","Bezčelistnatec s kruhovitými ústy, žije v čistých potocích."]
+];
+const fbg={horske:"#d8e3ec",reky:"#cfe6e4",rybniky:"#dfe8d0",vzacne:"#f0e2d6"};
+function drawFish(sh,c1,c2,pat,f){
+  f=f||c1;
+  const [rx,ry]={std:[62,22],tall:[56,34],long:[72,11]}[sh], cx=88, cy=58, st='stroke="rgba(0,0,0,.25)"';
+  let g='<path d="M0 98Q25 92 50 98T100 98T150 98T200 98V120H0z" fill="#fff" opacity=".4"/>';
+  g+=`<path d="M${cx+rx-8} ${cy}L${cx+rx+32} ${cy-ry*.9-5}L${cx+rx+32} ${cy+ry*.9+5}Z" fill="${f}" ${st}/>`;
+  g+=`<path d="M${cx-20} ${cy-ry+2}Q${cx} ${cy-ry-16} ${cx+22} ${cy-ry+3}Z" fill="${f}" ${st}/>`;
+  g+=`<path d="M${cx-8} ${cy+ry-3}L${cx-18} ${cy+ry+13}L${cx+8} ${cy+ry-2}Z" fill="${f}" ${st}/>`;
+  g+=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${c1}"/>`;
+  g+=`<ellipse cx="${cx}" cy="${cy+ry*.42}" rx="${rx*.88}" ry="${ry*.5}" fill="${c2}" opacity=".85"/>`;
+  const r5=[0,1,2,3,4,5];
+  if(pat==="spots"||pat==="rspots") g+=r5.map(i=>`<circle cx="${cx-26+i*13}" cy="${cy-ry*.35+(i%2)*ry*.5}" r="${Math.max(2,ry*.11)}" fill="${pat==="rspots"&&i%2?"#c8452d":"#1d2421"}" opacity=".6"/>`).join("");
+  if(pat==="stripes") g+=r5.slice(0,5).map(i=>`<path d="M${cx-24+i*14} ${cy-ry*.75}V${cy+ry*.3}" stroke="#1d2421" opacity=".35" stroke-width="5"/>`).join("");
+  if(pat==="line") g+=`<path d="M${cx-rx*.55} ${cy-1}H${cx+rx*.6}" stroke="#fff" opacity=".6" stroke-width="3"/>`;
+  if(pat==="barbels") g+=`<path d="M${cx-rx+3} ${cy+4}q-10 4-12 12M${cx-rx+5} ${cy+6}q-6 8-4 16" stroke="${c1}" fill="none" stroke-width="2" stroke-linecap="round"/>`;
+  g+=`<path d="M${cx-rx+22} ${cy-ry*.7}Q${cx-rx+30} ${cy} ${cx-rx+22} ${cy+ry*.7}" stroke="rgba(0,0,0,.3)" fill="none"/>`;
+  g+=`<circle cx="${cx-rx+13}" cy="${cy-ry*.2}" r="3.4" fill="#fff"/><circle cx="${cx-rx+12}" cy="${cy-ry*.2}" r="1.8" fill="#1d2421"/>`;
+  return g;
+}
+document.getElementById("fgrid").innerHTML=F.map(([n,l,h,sh,c1,c2,pat,f,m,t])=>`
+  <article class="card" data-h="${h}">
+    <svg class="pic" viewBox="0 0 200 120" role="img" aria-label="Kresba: ${n}" style="background:${fbg[h]}">${drawFish(sh,c1,c2,pat,f)}</svg>
+    <h2>${n}</h2>
+    <p class="latin">${l}</p>
+    <p>${t}</p>
+    <div class="meta"><b>Délka:</b> ${m}</div>
+  </article>`).join("");
+
+function setupFilter(listId,gridId){
+  const btns=document.querySelectorAll("#"+listId+" button");
+  btns.forEach(b=>b.addEventListener("click",()=>{
+    btns.forEach(x=>x.setAttribute("aria-pressed",x===b));
+    document.querySelectorAll("#"+gridId+" .card").forEach(c=>{
+      c.hidden = b.dataset.filter!=="vse" && c.dataset.h!==b.dataset.filter;
+    });
+  }));
+}
+setupFilter("af","grid");
+setupFilter("ff","fgrid");
+</script>
+</body>
+</html>
